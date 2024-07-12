@@ -19,16 +19,14 @@ We take the resulting file and feed it into the docker container. If the contain
 """
 
 import os
-import re
-import yaml
 import shutil
 
-from const import DEV_CONTAINER_YAML, LANGUAGE, REPOSITORY_URL
 from parser import parse_yaml_frontmatter
 
 # Walk the directory and look for markdown files
 for root, dirs, files in os.walk("."):
     for file in files:
+        print(f"Checking {root}/{file}")
         # Attempt to open file, skip any that can't be read
         try:
             with open(os.path.join(root, file), "r") as f:
