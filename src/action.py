@@ -28,9 +28,10 @@ os.system("pwd")
 os.system("ls -la")
 
 # Walk the directory and look for markdown files
-for root, dirs, files in os.walk("."):
+for root, dirs, files in os.walk(".", followlinks=True):
     if root.startswith("./."):
         continue
+    
     for file in files:
         print(f"Checking {root}/{file}")
         # Attempt to open file, skip any that can't be read
