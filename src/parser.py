@@ -4,6 +4,8 @@ from typing import List
 
 import yaml
 
+from const import DEVCONTAINER_YAML, CODEBLOCK_LABEL
+
 
 def get_codeblock_label(fn: str):
     # Read the file and extract the yaml front matter
@@ -11,14 +13,19 @@ def get_codeblock_label(fn: str):
         content = f.read()
     yaml_match = re.search(r"^---\n([\s\S]*?)\n---", content)
     
+    # TODO: What do we want the default to be here?
+    label = "python"
+    
     # If the yaml front matter exists, parse it and return the codeblock_label
     if yaml_match:
         yaml_block = yaml.safe_load(yaml_match.group(1))
-        return yaml_block.get("codeblock_label", "python")
+        if DEVCONTAINER_YAML in yaml_block:
+            devcontainer = yaml_block[DEVCONTAINER_YAML]
+            if CODEBLOCK_LABEL in devcontainer:
+                label = devcontainer[CODEBLOCK_LABEL]
     
-    # TODO: What do we want the default to be here?
     # If the yaml front matter doesn't exist, return "python"
-    return "python"
+    return label
 
 def parse_markdown(fn: str, code_block_label: str) -> List[str]:
     """ 

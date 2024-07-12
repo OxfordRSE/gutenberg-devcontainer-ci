@@ -22,6 +22,8 @@ import os
 import re
 import yaml
 
+from const import DEVCONTAINER_YAML, CODEBLOCK_LABEL
+
 # Walk the directory and look for markdown files
 for root, dirs, files in os.walk("."):
     for file in files:
