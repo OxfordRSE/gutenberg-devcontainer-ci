@@ -15,7 +15,7 @@ class YamlFrontMatter:
 
 def parse_yaml_frontmatter(content: str) -> YamlFrontMatter:
     # TODO: What do we want the default to be here?
-    yaml_fm = YamlFrontMatter(language="python", repository_url="")
+    yaml_fm = YamlFrontMatter(language=None, repository_url=None)
     
     # Regex to match the yaml front matter
     yaml_match = re.search(r"^---\n([\s\S]*?)\n---", content)
@@ -81,13 +81,14 @@ if __name__ == "__main__":
                         help="The filename of the markdown file to parse")
     parser.add_argument("-o", "--output", type=str, default=None,
                         help="The filename to write the parsed markdown to")
-    parser.add_argument("-l", "--label", type=str, default="python",
+    parser.add_argument("-l", "--label", type=str, default=None,
                         help="The code block label to uncomment")
     args = parser.parse_args()
+    print(args)
     
     # If no label is provided, try to extract it from the yaml front matter
     if not args.label:
-        code_block_label = parse_yaml_frontmatter(args.filename)
+        code_block_label = get_codeblock_label(args.filename)
     else:
         code_block_label = args.label    
     print(f"Parsing markdown file:{args.filename} for executable "
