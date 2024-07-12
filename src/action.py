@@ -23,30 +23,41 @@ import re
 import yaml
 import shutil
 
-from const import DEVCONTAINER_YAML, CODEBLOCK_LABEL
+from const import DEV_CONTAINER_YAML, LANGUAGE, REPOSITORY_URL
+from parser import parse_yaml_frontmatter
 
 # Walk the directory and look for markdown files
 for root, dirs, files in os.walk("."):
     for file in files:
-        if file.endswith(".md"):
+        # Attempt to open file, skip any that can't be read
+        try:
             with open(os.path.join(root, file), "r") as f:
                 content = f.read()
-            yaml_match = re.search(r"^---\n([\s\S]*?)\n---", content)
-            if yaml_match:
-                yaml_block = yaml.safe_load(yaml_match.group(1))
-                if yaml_block.get("devContainer"):
-                    dev_container = yaml_block["devContainer"]
-                    repository_url = dev_container["repositoryUrl"]
-                    language = dev_container["language"]
-                    if repository_url is not None and language is not None:
-                        print(f"Found devContainer in {file}: {repository_url} ({language})")
-                        # Clone the repository
-                        os.system(f"git clone {repository_url} tmp")
-                        # Run the docker container
-                        os.system(f"docker run --rm tmp/.devcontainer")
-                        print(f"Ran docker container for {repository_url} with no errors")
-                        shutil.rmtree("tmp")
-                    elif repository_url is None:
-                        print(f"Found devContainer in {file}, but no repositoryUrl")
-                    elif language is None:
-                        print(f"Found devContainer in {file}, but no language")
+        except Exception as e:
+            continue
+        
+        # Parse the yaml front matter
+        yaml_fm = parse_yaml_frontmatter(content)
+        repository_url = yaml_fm.repository_url
+        language = yaml_fm.language
+        
+        # If we have a repository_url, we can try to build the container
+        if repository_url:
+            print(f"Building container for {repository_url}")
+            # TODO: Build the container
+            pass
+        
+        # If we have a language, we can parse the file
+        if language:
+            print(f"Parsing {file} for {language}")
+            
+            # TODO: Parse the file, use a subprocess or a function call?
+            pass
+
+            
+            
+        
+        
+        
+                    
+                
