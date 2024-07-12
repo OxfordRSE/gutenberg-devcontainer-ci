@@ -23,6 +23,8 @@ import shutil
 
 from parser import parse_yaml_frontmatter
 
+print("Starting action")
+
 # Walk the directory and look for markdown files
 for root, dirs, files in os.walk("."):
     for file in files:
