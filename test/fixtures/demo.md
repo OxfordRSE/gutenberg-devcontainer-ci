@@ -1,7 +1,7 @@
 ---
 title: Demo
 devContainer:
-    respositoryUrl: "https://github.com/OxfordRSE/gutenberg-devcontainer-ci.git"
+    repositoryUrl: "https://github.com/OxfordRSE/gutenberg-devcontainer-ci.git"
     language: "python"
 ---
 
