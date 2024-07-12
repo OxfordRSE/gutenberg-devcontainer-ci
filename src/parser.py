@@ -1,31 +1,44 @@
 import argparse
 import re
 from typing import List
+from dataclasses import dataclass
 
 import yaml
 
-from const import DEVCONTAINER_YAML, CODEBLOCK_LABEL
+from const import DEV_CONTAINER_YAML, LANGUAGE, REPOSITORY_URL
+
+@dataclass
+class YamlFrontMatter:
+    language: str
+    repository_url: str
 
 
-def get_codeblock_label(fn: str):
-    # Read the file and extract the yaml front matter
-    with open(fn, 'r') as f:   
-        content = f.read()
-    yaml_match = re.search(r"^---\n([\s\S]*?)\n---", content)
-    
+def parse_yaml_frontmatter(content: str) -> YamlFrontMatter:
     # TODO: What do we want the default to be here?
-    label = "python"
+    yaml_fm = YamlFrontMatter(language="python", repository_url="")
+    
+    # Regex to match the yaml front matter
+    yaml_match = re.search(r"^---\n([\s\S]*?)\n---", content)
     
     # If the yaml front matter exists, parse it and return the codeblock_label
     if yaml_match:
         yaml_block = yaml.safe_load(yaml_match.group(1))
-        if DEVCONTAINER_YAML in yaml_block:
-            devcontainer = yaml_block[DEVCONTAINER_YAML]
-            if CODEBLOCK_LABEL in devcontainer:
-                label = devcontainer[CODEBLOCK_LABEL]
+        if DEV_CONTAINER_YAML in yaml_block:
+            devcontainer = yaml_block[DEV_CONTAINER_YAML]
+            if LANGUAGE in devcontainer:
+                yaml_fm.language = devcontainer[LANGUAGE]
+            if REPOSITORY_URL in devcontainer:
+                yaml_fm.repository_url = devcontainer[REPOSITORY_URL]
     
     # If the yaml front matter doesn't exist, return "python"
-    return label
+    return yaml_fm
+
+def get_codeblock_label(fn: str) -> str:
+    # Read the file and extract the yaml front matter
+    with open(fn, 'r') as f:   
+        content = f.read()
+    yaml_frontmatter = parse_yaml_frontmatter(content)
+    return yaml_frontmatter.language
 
 def parse_markdown(fn: str, code_block_label: str) -> List[str]:
     """ 
@@ -55,7 +68,7 @@ def parse_markdown(fn: str, code_block_label: str) -> List[str]:
     # Return the altered file content as a list of lines
     return test_content
 
-def write_test_content(fn: str, new_content: List[str]):
+def write_test_content(fn: str, new_content: List[str]) -> None:
     with open(fn, 'w') as f:
         f.writelines(new_content)
         
@@ -74,7 +87,7 @@ if __name__ == "__main__":
     
     # If no label is provided, try to extract it from the yaml front matter
     if not args.label:
-        code_block_label = get_codeblock_label(args.filename)
+        code_block_label = parse_yaml_frontmatter(args.filename)
     else:
         code_block_label = args.label    
     print(f"Parsing markdown file:{args.filename} for executable "
