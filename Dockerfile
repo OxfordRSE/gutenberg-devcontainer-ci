@@ -3,7 +3,7 @@ FROM python:3.12-bookworm
 
 # Install docker
 RUN apt-get update && apt-get install -y docker.io tree
-RUN pip install yaml
+RUN pip install pyyaml
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
 COPY . /action
