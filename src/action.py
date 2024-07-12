@@ -44,7 +44,14 @@ for root, dirs, files in os.walk("."):
         # If we have a repository_url, we can try to build the container
         if repository_url:
             print(f"Building container for {repository_url}")
-            # TODO: Build the container
+
+            # Clone the repository
+            os.system(f"git clone {repository_url} tmp")
+            # Run the docker container
+            os.system(f"docker run --rm tmp/.devcontainer")
+            print(f"Ran docker container for {repository_url} with no errors")
+            shutil.rmtree("tmp")
+
             pass
         
         # If we have a language, we can parse the file
