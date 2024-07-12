@@ -10,6 +10,4 @@ COPY src /action
 WORKDIR /action
 
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["/usr/local/bin/python"]
-
-CMD ["-e", "import os; os.system('./src/entrypoint.sh World')"]
+ENTRYPOINT ["/action/entrypoint.sh"]
