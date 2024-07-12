@@ -5,7 +5,7 @@ time=$(date)
 echo "time=$time" >> "$GITHUB_OUTPUT"
 
 python -c "print('Hello from Python, too!')"
-pwd
-ls /github
 
-ls -la /github/workflow
+tree /
+pwd
+tree /github
