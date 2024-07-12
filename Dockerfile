@@ -1,5 +1,5 @@
 # Container image that runs your code
-FROM ubuntu:20.04
+FROM python:3.12-bookworm
 
 # Install docker
 RUN apt-get update && apt-get install -y docker.io
@@ -10,6 +10,6 @@ COPY src /action
 WORKDIR /action
 
 # Code file to execute when the docker container starts up (`entrypoint.sh`)
-ENTRYPOINT ["/usr/bin/python"]
+ENTRYPOINT ["/usr/local/bin/python"]
 
-CMD ["-e", "import os; os.system('entrypoint.sh World')"]
+CMD ["-e", "import os; os.system('./src/entrypoint.sh World')"]
