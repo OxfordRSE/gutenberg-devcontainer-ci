@@ -1,7 +1,7 @@
 ---
 title: Demo
-dev_container:
-    respository_url: "foobar"
+devContainer:
+    respositoryUrl: "https://github.com/OxfordRSE/gutenberg-devcontainer-ci.git"
     language: "python"
 ---
 
