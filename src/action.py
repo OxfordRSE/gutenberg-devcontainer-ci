@@ -21,6 +21,7 @@ We take the resulting file and feed it into the docker container. If the contain
 import os
 import re
 import yaml
+import shutil
 
 from const import DEVCONTAINER_YAML, CODEBLOCK_LABEL
 
@@ -39,6 +40,12 @@ for root, dirs, files in os.walk("."):
                     language = dev_container["language"]
                     if repository_url is not None and language is not None:
                         print(f"Found devContainer in {file}: {repository_url} ({language})")
+                        # Clone the repository
+                        os.system(f"git clone {repository_url} tmp")
+                        # Run the docker container
+                        os.system(f"docker run --rm tmp/.devcontainer")
+                        print(f"Ran docker container for {repository_url} with no errors")
+                        shutil.rmtree("tmp")
                     elif repository_url is None:
                         print(f"Found devContainer in {file}, but no repositoryUrl")
                     elif language is None:
