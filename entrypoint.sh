@@ -8,3 +8,5 @@ python -c "print('Hello from Python, too!')"
 pwd
 ls -l
 ls -l ..
+
+tree /github
