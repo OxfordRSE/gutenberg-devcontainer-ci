@@ -33,11 +33,13 @@ for root, dirs, files in os.walk("."):
             yaml_match = re.search(r"^---\n([\s\S]*?)\n---", content)
             if yaml_match:
                 yaml_block = yaml.safe_load(yaml_match.group(1))
-                if yaml_block.get("devcontainer"):
-                    devcontainer = yaml_block["devcontainer"]
-                    repository_url = devcontainer["repository_url"]
-                    language = devcontainer["language"]
+                if yaml_block.get("devContainer"):
+                    dev_container = yaml_block["devContainer"]
+                    repository_url = dev_container["repositoryUrl"]
+                    language = dev_container["language"]
                     if repository_url is not None and language is not None:
-                        print(f"Found devcontainer in {file}: {repository_url} ({language})")
+                        print(f"Found devContainer in {file}: {repository_url} ({language})")
                     elif repository_url is None:
-                        print(f"Found devcontainer in {file}, but no repository_url")
+                        print(f"Found devContainer in {file}, but no repositoryUrl")
+                    elif language is None:
+                        print(f"Found devContainer in {file}, but no language")
