@@ -29,7 +29,7 @@ os.system("ls -la")
 
 # Walk the directory and look for markdown files
 for root, dirs, files in os.walk("."):
-    if root.startswith("."):
+    if root.startswith("./."):
         continue
     for file in files:
         print(f"Checking {root}/{file}")
