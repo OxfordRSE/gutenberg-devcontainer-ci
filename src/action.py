@@ -29,6 +29,8 @@ os.system("ls -la")
 
 # Walk the directory and look for markdown files
 for root, dirs, files in os.walk("."):
+    if root.startswith("."):
+        continue
     for file in files:
         print(f"Checking {root}/{file}")
         # Attempt to open file, skip any that can't be read
@@ -42,6 +44,9 @@ for root, dirs, files in os.walk("."):
         yaml_fm = parse_yaml_frontmatter(content)
         repository_url = yaml_fm.repository_url
         language = yaml_fm.language
+
+        print(f"Found repository_url: {repository_url}")
+        print(f"Found language: {language}")
         
         # If we have a repository_url, we can try to build the container
         if repository_url:
