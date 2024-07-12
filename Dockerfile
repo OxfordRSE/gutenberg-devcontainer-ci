@@ -5,7 +5,7 @@ FROM python:3.12-bookworm
 RUN apt-get update && apt-get install -y docker.io
 
 # Copies your code file from your action repository to the filesystem path `/` of the container
-COPY src /action
+COPY . /action
 
 WORKDIR /action
 
